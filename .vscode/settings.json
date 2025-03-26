@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "utiliti.h": "c",
+        "string.h": "c",
+        "particle.h": "c"
+    }
+}
