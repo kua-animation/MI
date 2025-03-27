@@ -1,8 +1,9 @@
 #include "../lib/include/Mi.h"
-#include <string.h>
+#define MAX_VAR 3
+
 int main(int argc, char* argv[]) {
 
-	if (argc < 3) {
+	if (argc < 2) {
 		exit(0);
 	}
 
@@ -10,36 +11,55 @@ int main(int argc, char* argv[]) {
 
 	if (!file) {
 		printf("file dosn't exist"); 
-		exit(0);
-	}
+		exit(0); }
 	
-	int lineNumber = atoi(argv[2]);
 
-	int lineNumberCount = 0;
-	int *ifileContext = malloc(lineNumber * sizeof(int));
-	char *fileContext = malloc(128); 
+	int LineCount = 0;
+	for (char c = getc(file); c != EOF; c = getc(file)) {
+		if (c == '\n') {
+			LineCount ++;
+		}
+	}
 
+	fseek(file, 0, SEEK_SET);
 
-	while (fgets(fileContext, 128, file)) {
+	const int lineNumber = LineCount;
 
-		for (int i = 0; i < strlen(fileContext); i ++) {
-			if ((int)fileContext[i] != 10) {
-				ifileContext[lineNumberCount] += (int)fileContext[i];
+	int *IntFileContext = malloc(lineNumber * sizeof(int));
+
+	nuber_file_content(file, IntFileContext);
+
+	int vars[MAX_VAR];
+
+	int t;
+	for (int i = 0; i < lineNumber; i++ ) {
+		switch(IntFileContext[i]) {
+		case 100:
+			printf("%c", vars[0]);
+		break;
+		case 101:
+			printf("%c", vars[1]);
+		break;
+		case 102:
+			printf("%c", vars[2]);
+		break;
+		
+		} 
+		if (IntFileContext[i] <= 110+126*MAX_VAR && IntFileContext[i] > 110) {
+			for (int j = 0; j < MAX_VAR; j++) {
+				t = IntFileContext[i] - (110+126*j);
+				//printf("%d %d\n", IntFileContext[i], t);
+				if (t <= 126) {
+					//printf("a");
+					vars[j] = t;
+					break;
+				}
 			}
 		}
-
-
-		lineNumberCount ++;
 	}
-	for (int i = 0; i < lineNumber; i++ ){
-		printf("line number %d = %d\n", i, ifileContext[i]);
-	}
-	
+
 
 	fclose(file);
-	free(ifileContext);
-	free(fileContext);
+	free(IntFileContext);
 
 }
-
-

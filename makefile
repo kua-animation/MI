@@ -4,7 +4,7 @@ CFLAGS =
 SRC_DIRS = src lib
 SRCS = $(wildcard $(addsuffix /*.c, $(SRC_DIRS)))
 OBJS = $(SRCS:.c=.o)
-TARGET = program
+TARGET = MI
 
 all: $(TARGET)
 
